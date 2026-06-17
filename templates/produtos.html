@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block conteudo %}
+  <h1>🛒 Produtos</h1>
+  <a href="/cadastrar-produto" class="btn">+ Cadastrar produto</a>
+
+  <table>
+    <thead>
+      <tr><th>Produto</th><th>Preço</th><th>Estoque</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      {% for p in produtos %}
+      <tr>
+        <td>{{ p[1] }}</td>
+        <td>R$ {{ "%.2f"|format(p[2]) }}</td>
+        <td>{{ p[3] }} un.</td>
+        <td>
+          {% if p[3] == 0 %}
+            <span class="badge vermelho">Sem estoque</span>
+          {% elif p[3] < 5 %}
+            <span class="badge amarelo">Estoque baixo</span>
+          {% else %}
+            <span class="badge verde">OK</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

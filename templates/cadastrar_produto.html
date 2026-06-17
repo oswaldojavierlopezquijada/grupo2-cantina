@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+  <h1>➕ Cadastrar Produto</h1>
+
+  <div class="card" style="max-w: 500px; margin: 20px 0; padding: 20px;">
+    <form action="" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+      
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+        <label for="nome" style="font-weight: bold;">Nome do Produto</label>
+        <input type="text" id="nome" name="nome" required placeholder="Ex: Hambúrguer" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+        <label for="preco" style="font-weight: bold;">Preço (R$)</label>
+        <input type="number" id="preco" name="preco" step="0.01" min="0" required placeholder="0.00" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+        <label for="estoque" style="font-weight: bold;">Quantidade em Estoque</label>
+        <input type="number" id="estoque" name="estoque" min="0" required placeholder="Ex: 20" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+        <a href="/produtos" style="text-decoration: underline; color: #555;">Voltar para produtos</a>
+        <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+          Salvar Produto
+        </button>
+      </div>
+
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block conteudo %}
+  <h1>🍔 Cantina Digital</h1>
+  <div class="cards">
+    <div class="card">
+      <h2>{{ total_produtos }}</h2>
+      <p>Produtos cadastrados</p>
+    </div>
+    <div class="card">
+      <h2>{{ total_pedidos }}</h2>
+      <p>Pedidos realizados</p>
+    </div>
+    <div class="card">
+      <h2>R$ {{ "%.2f"|format(receita) }}</h2>
+      <p>Receita total</p>
+    </div>
+  </div>
+
+  {% if alertas %}
+    <div class="alerta">
+      <strong>⚠️ Estoque baixo:</strong>
+      {% for a in alertas %}
+        {{ a[0] }} ({{ a[1] }} unidades){% if not loop.last %}, {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
