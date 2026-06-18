@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block page_title %}Novo Pedido{% endblock %}
+{% block page_title_jp %}注文作成{% endblock %}
+
+{% block topbar_actions %}
+    <a href="/pedidos" class="btn btn-secondary">
+        <i class="ti ti-arrow-left" aria-hidden="true"></i> Voltar
+    </a>
+{% endblock %}
+
+{% block conteudo %}
+
+<div class="section-label mb-2">Registrar pedido 　注文登録</div>
+
+{% if erro %}
+<div class="alert danger mb-2">
+    <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+    <span>{{ erro }}</span>
+</div>
+{% endif %}
+
+<div class="panel">
+    <div class="panel-title">
+        Dados do Pedido
+        <span class="panel-title-jp">注文情報</span>
+    </div>
+
+    <form method="POST" action="/novo-pedido">
+        <div class="form-grid mb-3">
+            <div class="form-group" style="grid-column: span 2;">
+                <label for="produto_id">Produto</label>
+                <select id="produto_id" name="produto_id" required>
+                    <option value="" disabled selected>Selecione um produto...</option>
+                    {% for produto in produtos %}
+                    {# SELECT id, nome, estoque FROM produtos WHERE estoque > 0 #}
+                    <option value="{{ produto[0] }}">
+                        {{ produto[1] }} — {{ produto[2] }} un. disponíveis
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quantidade">Quantidade</label>
+                <input type="number" id="quantidade" name="quantidade"
+                       min="1" placeholder="1" required>
+            </div>
+        </div>
+
+        {% if not produtos %}
+        <div class="alert warning mb-3">
+            <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+            <span>Nenhum produto com estoque disponível. <a href="/cadastrar-produto" style="color:#c0392b; font-weight:500;">Cadastre um produto</a> antes de criar pedidos.</span>
+        </div>
+        {% endif %}
+
+        <div class="flex gap-1">
+            <button type="submit" class="btn btn-primary" {{ 'disabled' if not produtos }}>
+                <i class="ti ti-check" aria-hidden="true"></i> Confirmar Pedido
+            </button>
+            <a href="/pedidos" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

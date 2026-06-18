@@ -1,49 +1,69 @@
 {% extends "base.html" %}
 
-{% block conteudo %}
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h1 style="margin: 0;">🛒 Registrar Novo Pedido</h1>
-    <a href="/pedidos" style="text-decoration: none; color: #3498db; font-weight: bold; font-size: 14px;">
-      ← Voltar para Pedidos
+{% block page_title %}Pedidos{% endblock %}
+{% block page_title_jp %}注文管理{% endblock %}
+
+{% block topbar_actions %}
+    <a href="/novo-pedido" class="btn btn-primary">
+        <i class="ti ti-plus" aria-hidden="true"></i> Novo Pedido
     </a>
-  </div>
+{% endblock %}
 
-  {# Exibe a mensagem de erro caso o estoque seja insuficiente #}
-  {% if erro %}
-    <div class="alert-danger" style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-weight: 500;">
-      ⚠️ {{ erro }}
+{% block conteudo %}
+
+<div class="section-label mb-2">Todos os pedidos 　全注文</div>
+
+<div class="data-table-wrap">
+    <div class="data-table-header">
+        <span class="table-title">{{ pedidos|length }} pedido(s) registrado(s)</span>
+        <a href="/novo-pedido" class="table-action">+ Novo Pedido</a>
     </div>
-  {% endif %}
+    <table class="sushi-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Total</th>
+                <th>Data do Pedido</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+            {# SELECT p.id, pr.nome, p.quantidade, p.total, p.data_pedido #}
+            <tr>
+                <td class="text-muted text-sm">{{ pedido[0] }}</td>
+                <td style="font-weight:500; color:#111;">{{ pedido[1] }}</td>
+                <td>{{ pedido[2] }} un.</td>
+                <td>R$ {{ "%.2f"|format(pedido[3]) }}</td>
+                <td class="text-muted text-sm">{{ pedido[4] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">
+                    <div class="empty-state">
+                        <i class="ti ti-clipboard-x" aria-hidden="true"></i>
+                        Nenhum pedido registrado ainda.
+                        <div class="mt-1">
+                            <a href="/novo-pedido" class="btn btn-primary" style="display:inline-flex; margin-top:10px;">
+                                <i class="ti ti-plus" aria-hidden="true"></i> Criar primeiro pedido
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-  <div class="card" style="padding: 30px; max-width: 500px; margin: 0 auto;">
-    <form action="/novo-pedido" method="POST">
-      
-      <div style="margin-bottom: 20px;">
-        <label for="produto_id" style="display: block; margin-bottom: 8px; font-weight: bold; color: #2c3e50;">
-          Selecione o Produto:
-        </label>
-        <select name="produto_id" id="produto_id" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; background-color: #fff;">
-          <option value="" disabled selected>Escolha um produto disponível...</option>
-          {% for produto in produtos %}
-            {# produto[0] = id, produto[1] = nome, produto[2] = estoque #}
-            <option value="{{ produto[0] }}">
-              {{ produto[1] }} (Estoque: {{ produto[2] }})
-            </option>
-          {% endfor %}
-        </select>
-      </div>
+    {% if pedidos %}
+    <div class="flex-between" style="padding:12px 20px; border-top: 0.5px solid #f0ebe3;">
+        <span class="text-muted text-sm">Total acumulado</span>
+        <span style="font-family:'Noto Serif JP',serif; font-size:15px; color:#111; font-weight:700;">
+            R$ {{ "%.2f"|format(pedidos|sum(attribute=3)) }}
+        </span>
+    </div>
+    {% endif %}
+</div>
 
-      <div style="margin-bottom: 20px;">
-        <label for="quantidade" style="display: block; margin-bottom: 8px; font-weight: bold; color: #2c3e50;">
-          Quantidade desejada:
-        </label>
-        <input type="number" name="quantidade" id="quantidade" min="1" required placeholder="Ex: 2" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; box-sizing: border-box;">
-      </div>
-
-      <button type="submit" style="width: 100%; padding: 12px; background-color: #2e7d32; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s;">
-        Confirmar Pedido
-      </button>
-
-    </form>
-  </div>
 {% endblock %}

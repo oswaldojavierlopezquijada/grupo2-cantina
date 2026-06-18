@@ -1,46 +1,90 @@
 {% extends "base.html" %}
 
-{% block conteudo %}
-  <h1>📋 Pedidos Realizados</h1>
+{% block page_title %}Histórico de Pedidos{% endblock %}
+{% block page_title_jp %}注文履歴{% endblock %}
 
-  <div class="card" style="padding: 20px; overflow-x: auto;">
-    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-      <thead>
-        <tr style="border-bottom: 2px solid #2c3e50; color: #2c3e50;">
-          <th style="padding: 12px 8px;">ID</th>
-          <th style="padding: 12px 8px;">Produto</th>
-          <th style="padding: 12px 8px; text-align: center;">Qtd.</th>
-          <th style="padding: 12px 8px; text-align: right;">Total</th>
-          <th style="padding: 12px 8px; text-align: center;">Data do Pedido</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% if pedidos %}
-          {% for pedido in pedidos %}
-          <tr style="border-bottom: 1px solid #ddd; transition: background 0.2s;">
-            <td style="padding: 12px 8px; color: #7f8c8d;">#{{ pedido[0] }}</td>
-            
-            <td style="font-weight: bold; padding: 12px 8px;">{{ pedido[1] }}</td>
-            
-            <td style="padding: 12px 8px; text-align: center;">{{ pedido[2] }}</td>
-            
-            <td style="padding: 12px 8px; text-align: right; color: #2e7d32; font-weight: 500;">
-              R$ {{ "%.2f"|format(pedido[3]) }}
-            </td>
-            
-            <td style="padding: 12px 8px; text-align: center; color: #555;">
-              {{ pedido[4] }}
-            </td>
-          </tr>
-          {% endfor %}
-        {% else %}
-          <tr>
-            <td colspan="5" style="padding: 30px; text-align: center; color: #7f8c8d;">
-              Nenhum pedido realizado até o momento.
-            </td>
-          </tr>
-        {% endif %}
-      </tbody>
+{% block conteudo %}
+
+<div class="section-label mb-2">Filtrar por data 　日付で絞り込む</div>
+
+<div class="panel mb-2">
+    <form method="GET" action="/historico_pedidos">
+        <div class="form-grid" style="grid-template-columns: 1fr 1fr auto;">
+            <div class="form-group">
+                <label for="data_inicio">Data início</label>
+                <input type="date" id="data_inicio" name="data_inicio"
+                       value="{{ filtros.data_inicio }}">
+            </div>
+            <div class="form-group">
+                <label for="data_fim">Data fim</label>
+                <input type="date" id="data_fim" name="data_fim"
+                       value="{{ filtros.data_fim }}">
+            </div>
+            <div class="form-group" style="justify-content:flex-end; flex-direction:row; align-items:flex-end; gap:8px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="ti ti-search" aria-hidden="true"></i> Filtrar
+                </button>
+                <a href="/historico_pedidos" class="btn btn-secondary">Limpar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="section-label mb-2">Resultados 　結果</div>
+
+<div class="data-table-wrap">
+    <div class="data-table-header">
+        <span class="table-title">{{ total_registros }} pedido(s) encontrado(s)</span>
+        <span class="text-muted text-sm">
+            Total: <strong style="color:#111;">R$ {{ "%.2f"|format(total_valor) }}</strong>
+        </span>
+    </div>
+    <table class="sushi-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Total</th>
+                <th>Data do Pedido</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in historico %}
+            {# SELECT p.id, pr.nome, p.quantidade, p.total, p.data_pedido #}
+            <tr>
+                <td class="text-muted text-sm">{{ pedido[0] }}</td>
+                <td style="font-weight:500; color:#111;">{{ pedido[1] }}</td>
+                <td>{{ pedido[2] }} un.</td>
+                <td>R$ {{ "%.2f"|format(pedido[3]) }}</td>
+                <td class="text-muted text-sm">{{ pedido[4] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">
+                    <div class="empty-state">
+                        <i class="ti ti-history" aria-hidden="true"></i>
+                        Nenhum pedido encontrado
+                        {% if filtros.data_inicio or filtros.data_fim %}
+                            para o período selecionado.
+                        {% else %}
+                            ainda.
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-  </div>
+
+    {% if historico %}
+    <div class="flex-between" style="padding:12px 20px; border-top: 0.5px solid #f0ebe3;">
+        <span class="text-muted text-sm">{{ total_registros }} registro(s)</span>
+        <span style="font-family:'Noto Serif JP',serif; font-size:15px; color:#111; font-weight:700;">
+            R$ {{ "%.2f"|format(total_valor) }}
+        </span>
+    </div>
+    {% endif %}
+</div>
+
 {% endblock %}
