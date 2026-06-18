@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+  <h1>📋 Pedidos Realizados</h1>
+
+  <div class="card" style="padding: 20px; overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+      <thead>
+        <tr style="border-bottom: 2px solid #2c3e50; color: #2c3e50;">
+          <th style="padding: 12px 8px;">ID</th>
+          <th style="padding: 12px 8px;">Produto</th>
+          <th style="padding: 12px 8px; text-align: center;">Qtd.</th>
+          <th style="padding: 12px 8px; text-align: right;">Total</th>
+          <th style="padding: 12px 8px; text-align: center;">Data do Pedido</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if pedidos %}
+          {% for pedido in pedidos %}
+          <tr style="border-bottom: 1px solid #ddd; transition: background 0.2s;">
+            <td style="padding: 12px 8px; color: #7f8c8d;">#{{ pedido[0] }}</td>
+            
+            <td style="font-weight: bold; padding: 12px 8px;">{{ pedido[1] }}</td>
+            
+            <td style="padding: 12px 8px; text-align: center;">{{ pedido[2] }}</td>
+            
+            <td style="padding: 12px 8px; text-align: right; color: #2e7d32; font-weight: 500;">
+              R$ {{ "%.2f"|format(pedido[3]) }}
+            </td>
+            
+            <td style="padding: 12px 8px; text-align: center; color: #555;">
+              {{ pedido[4] }}
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5" style="padding: 30px; text-align: center; color: #7f8c8d;">
+              Nenhum pedido realizado até o momento.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
