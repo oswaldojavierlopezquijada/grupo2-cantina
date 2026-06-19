@@ -127,16 +127,3 @@ def cadastrar_produto():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-@app.route("/pedidos")
-def listar_pedidos():
-    con = conectar()
-    cur = con.cursor()
-    pedidos = cur.execute("""
-        SELECT p.id, pr.nome, p.quantidade, p.total, p.data_pedido
-        FROM pedidos p
-        JOIN produtos pr ON p.produto_id = pr.id
-        ORDER BY p.id DESC
-    """).fetchall()
-    con.close()
-    return render_template("pedidos.html", pedidos=pedidos)
