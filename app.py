@@ -125,5 +125,35 @@ def cadastrar_produto():
 
     return render_template("cadastrar_produto.html")
 
+
+@app.route("/editar-produto/<int:id>", methods=["GET", "POST"])
+def editar_produto(id):
+    con = conectar()
+    cur = con.cursor()
+
+    if request.method == "POST":
+        nome    = request.form["nome"]
+        preco   = float(request.form["preco"])
+        estoque = int(request.form["estoque"])
+
+        cur.execute(
+            "UPDATE produtos SET nome = ?, preco = ?, estoque = ? WHERE id = ?",
+            (nome, preco, estoque, id)
+        )
+        con.commit()
+        con.close()
+        return redirect("/produtos")
+
+    # GET: busca o produto atual para preencher o formulário
+    produto = cur.execute(
+        "SELECT id, nome, preco, estoque FROM produtos WHERE id = ?", (id,)
+    ).fetchone()
+    con.close()
+
+    if not produto:
+        return "Produto não encontrado", 404
+
+    return render_template("editar_produto.html", produto=produto)
+
 if __name__ == "__main__":
     app.run(debug=True)

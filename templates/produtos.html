@@ -26,6 +26,7 @@
                 <th>Preço</th>
                 <th>Estoque</th>
                 <th>Situação</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -35,7 +36,14 @@
                 <td class="text-muted text-sm">{{ produto[0] }}</td>
                 <td style="font-weight:500; color:#111;">{{ produto[1] }}</td>
                 <td>R$ {{ "%.2f"|format(produto[2]) }}</td>
+                <td>...</td>
+                <td>...</td>
                 <td>
+                    <a href="/editar-produto/{{ produto[0] }}" class="btn btn-secondary" style="padding:5px 12px; font-size:11px;">
+                        <i class="ti ti-pencil" aria-hidden="true"></i> Editar
+                    </a>
+                </td>
+            </tr>
                     {% if produto[3] < 5 %}
                         <span style="color:#c0392b; font-weight:500;">
                             <i class="ti ti-alert-triangle" style="font-size:13px;" aria-hidden="true"></i>

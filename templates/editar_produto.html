@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block page_title %}Editar Produto{% endblock %}
+{% block page_title_jp %}商品編集{% endblock %}
+
+{% block topbar_actions %}
+    <a href="/produtos" class="btn btn-secondary">
+        <i class="ti ti-arrow-left" aria-hidden="true"></i> Voltar
+    </a>
+{% endblock %}
+
+{% block conteudo %}
+
+<div class="section-label mb-2">Editar produto 　商品編集</div>
+
+<div class="panel">
+    <div class="panel-title">
+        {{ produto[1] }}
+        <span class="panel-title-jp">ID #{{ produto[0] }}</span>
+    </div>
+
+    <form method="POST">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Nome do Produto</label>
+                <input type="text" name="nome" value="{{ produto[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Preço (R$)</label>
+                <input type="number" name="preco" step="0.01" min="0" value="{{ produto[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Estoque (unidades)</label>
+                <input type="number" name="estoque" min="0" value="{{ produto[3] }}" required>
+            </div>
+        </div>
+
+        <div class="flex gap-1">
+            <button type="submit" class="btn btn-primary">
+                <i class="ti ti-device-floppy" aria-hidden="true"></i> Salvar alterações
+            </button>
+            <a href="/produtos" class="btn btn-secondary">
+                <i class="ti ti-x" aria-hidden="true"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
