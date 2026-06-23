@@ -127,3 +127,23 @@ def cadastrar_produto():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route("/cadastrar-produto", methods=["GET", "POST"])
+def cadastrar_produto():
+    if request.method == "POST":
+        nome      = request.form["nome"]
+        preco     = float(request.form["preco"])
+        estoque   = int(request.form["estoque"])
+        descricao = request.form.get("descricao", "")   # <-- adicionar isso
+
+        con = conectar()
+        cur = con.cursor()
+        cur.execute(
+            "INSERT INTO produtos (nome, preco, estoque, descricao) VALUES (?, ?, ?, ?)",
+            (nome, preco, estoque, descricao)   # <-- e isso
+        )
+        con.commit()
+        con.close()
+        return redirect("/produtos")
+
+    return render_template("cadastrar_produto.html")

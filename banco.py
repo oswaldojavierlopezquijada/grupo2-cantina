@@ -39,3 +39,13 @@ def adicionar_produto(nome , preco, estoque):
                 """, (nome, preco, estoque))
     con.commit()
     con.close()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS produtos (
+        id      INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome    TEXT    NOT NULL,
+        preco   REAL    NOT NULL,
+        estoque INTEGER NOT NULL,
+        descricao TEXT DEFAULT ''   -- <-- adicionar isso
+    )
+""")
