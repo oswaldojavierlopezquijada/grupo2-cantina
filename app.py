@@ -159,7 +159,7 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 @app.route("/cadastrar-produto", methods=["GET", "POST"])
-def cadastrar_produto():
+def cadastrar_iten():
     if request.method == "POST":
         nome      = request.form["nome"]
         preco     = float(request.form["preco"])
