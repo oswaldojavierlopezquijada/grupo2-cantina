@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block page_title %}Acesso Administrativo{% endblock %}
+{% block page_title_jp %}管理者ログイン{% endblock %}
+
+{% block conteudo %}
+
+<div style="max-width:400px;margin:40px auto;">
+
+    {% if erro %}
+    <div class="alert danger">
+        <i class="ti ti-alert-circle" aria-hidden="true"></i>
+        {{ erro }}
+    </div>
+    {% endif %}
+
+    <div class="panel">
+        <div class="panel-title">
+            Entrar como administrador
+            <span class="panel-title-jp">管理者</span>
+        </div>
+
+        <form method="POST" action="/admin/login">
+            <div class="form-grid" style="grid-template-columns:1fr;">
+                <div class="form-group">
+                    <label for="usuario">Usuário</label>
+                    <input
+                        type="text"
+                        id="usuario"
+                        name="usuario"
+                        placeholder="admin"
+                        required
+                        autofocus
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        placeholder="••••••••"
+                        required
+                    >
+                </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center;margin-top:4px;">
+                <i class="ti ti-login" aria-hidden="true"></i>
+                Entrar
+            </button>
+        </form>
+    </div>
+
+    <div style="text-align:center;margin-top:12px;">
+        <a href="/" style="font-size:12px;color:#bbb;letter-spacing:.5px;">
+            <i class="ti ti-arrow-left" style="font-size:12px;" aria-hidden="true"></i>
+            Voltar ao painel
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

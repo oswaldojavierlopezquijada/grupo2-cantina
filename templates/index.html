@@ -1,86 +1,94 @@
 {% extends "base.html" %}
 
-{% block page_title %}Painel Principal{% endblock %}
+{% block page_title %}Painel{% endblock %}
 {% block page_title_jp %}ダッシュボード{% endblock %}
+
+{% block topbar_actions %}
+{% if session.get("admin_logado") %}
+<a href="/admin/logout" class="btn btn-secondary" style="font-size:11px;">
+    <i class="ti ti-logout" aria-hidden="true"></i>
+    Sair
+</a>
+{% else %}
+<a href="/admin/login" class="btn btn-secondary" style="font-size:11px;">
+    <i class="ti ti-lock" aria-hidden="true"></i>
+    Admin
+</a>
+{% endif %}
+{% endblock %}
 
 {% block conteudo %}
 
-<div class="section-label mb-2">Resumo geral 　概要</div>
+<span class="section-label">visão geral</span>
 
 <div class="cards-grid">
-    <div class="metric-card accent" data-jp="注">
+    <div class="metric-card" data-jp="品">
+        <div class="metric-label">Total de Produtos</div>
+        <div class="metric-value">{{ total_produtos }}</div>
+        <div class="metric-delta up">
+            <i class="ti ti-box" aria-hidden="true"></i>
+            itens cadastrados
+        </div>
+    </div>
+
+    <div class="metric-card" data-jp="注">
         <div class="metric-label">Total de Pedidos</div>
         <div class="metric-value">{{ total_pedidos }}</div>
         <div class="metric-delta up">
             <i class="ti ti-clipboard-list" aria-hidden="true"></i>
-            registrados no sistema
+            pedidos realizados
         </div>
     </div>
-    <div class="metric-card" data-jp="円">
+
+    <div class="metric-card accent" data-jp="円">
         <div class="metric-label">Receita Total</div>
-        <div class="metric-value">R${{ "%.2f"|format(receita) }}</div>
-        <div class="metric-delta up">
-            <i class="ti ti-trending-up" aria-hidden="true"></i>
-            acumulado
-        </div>
-    </div>
-    <div class="metric-card" data-jp="品">
-        <div class="metric-label">Produtos Cadastrados</div>
-        <div class="metric-value">{{ total_produtos }}</div>
-        <div class="metric-delta {{ 'down' if alertas else 'up' }}">
-            <i class="ti ti-{{ 'alert-triangle' if alertas else 'circle-check' }}" aria-hidden="true"></i>
-            {{ alertas|length if alertas else 0 }} com estoque baixo
+        <div class="metric-value">R$ {{ "%.2f"|format(receita) }}</div>
+        <div class="metric-delta">
+            <i class="ti ti-currency-dollar" aria-hidden="true"></i>
+            em vendas
         </div>
     </div>
 </div>
 
 {% if alertas %}
-<div class="alert danger mb-3">
+<span class="section-label">alertas de estoque</span>
+
+{% for nome, estoque in alertas %}
+<div class="alert {% if estoque == 0 %}danger{% else %}warning{% endif %}">
     <i class="ti ti-alert-triangle" aria-hidden="true"></i>
     <div>
-        <strong>Estoque crítico (abaixo de 5 unidades):</strong>
-        <ul style="margin: 6px 0 0 16px; list-style: disc;">
-            {% for nome, estoque in alertas %}
-            <li>{{ nome }} — <strong>{{ estoque }} un.</strong> restantes</li>
-            {% endfor %}
-        </ul>
+        <strong>{{ nome }}</strong> —
+        {% if estoque == 0 %}
+            sem estoque disponível.
+        {% else %}
+            apenas <strong>{{ estoque }}</strong> unidade{{ 's' if estoque != 1 }} restante{{ 's' if estoque != 1 }}.
+        {% endif %}
     </div>
 </div>
+{% endfor %}
 {% endif %}
 
-<div class="flex-between mb-2">
-    <div class="section-label" style="flex:1; margin-bottom:0;">Acesso rápido 　クイックアクセス</div>
-</div>
+<span class="section-label">ações rápidas</span>
 
-<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:14px;">
-    <a href="/produtos" class="panel" style="display:flex; align-items:center; gap:14px; padding:18px 20px; cursor:pointer; transition: border-color .15s;">
-        <i class="ti ti-box" style="font-size:28px; color:#c0392b;" aria-hidden="true"></i>
-        <div>
-            <div style="font-weight:500; font-size:14px; color:#111;">Ver Produtos</div>
-            <div class="text-muted text-sm">商品一覧</div>
-        </div>
+<div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <a href="/novo-pedido" class="btn btn-primary">
+        <i class="ti ti-shopping-cart-plus" aria-hidden="true"></i>
+        Novo Pedido
     </a>
-    <a href="/cadastrar-produto" class="panel" style="display:flex; align-items:center; gap:14px; padding:18px 20px; cursor:pointer; transition: border-color .15s;">
-        <i class="ti ti-plus" style="font-size:28px; color:#c0392b;" aria-hidden="true"></i>
-        <div>
-            <div style="font-weight:500; font-size:14px; color:#111;">Novo Produto</div>
-            <div class="text-muted text-sm">商品登録</div>
-        </div>
+    <a href="/pedidos" class="btn btn-secondary">
+        <i class="ti ti-clipboard-list" aria-hidden="true"></i>
+        Ver Pedidos
     </a>
-    <a href="/novo-pedido" class="panel" style="display:flex; align-items:center; gap:14px; padding:18px 20px; cursor:pointer; transition: border-color .15s;">
-        <i class="ti ti-shopping-cart-plus" style="font-size:28px; color:#c0392b;" aria-hidden="true"></i>
-        <div>
-            <div style="font-weight:500; font-size:14px; color:#111;">Novo Pedido</div>
-            <div class="text-muted text-sm">注文作成</div>
-        </div>
+    <a href="/produtos" class="btn btn-secondary">
+        <i class="ti ti-box" aria-hidden="true"></i>
+        Ver Produtos
     </a>
-    <a href="/pedidos" class="panel" style="display:flex; align-items:center; gap:14px; padding:18px 20px; cursor:pointer; transition: border-color .15s;">
-        <i class="ti ti-clipboard-list" style="font-size:28px; color:#c0392b;" aria-hidden="true"></i>
-        <div>
-            <div style="font-weight:500; font-size:14px; color:#111;">Ver Pedidos</div>
-            <div class="text-muted text-sm">注文一覧</div>
-        </div>
+    {% if session.get("admin_logado") %}
+    <a href="/cadastrar-produto" class="btn btn-secondary">
+        <i class="ti ti-plus" aria-hidden="true"></i>
+        Cadastrar Produto
     </a>
+    {% endif %}
 </div>
 
 {% endblock %}

@@ -1,58 +1,105 @@
 {% extends "base.html" %}
 
-{% block page_title %}Novo Produto{% endblock %}
+{% block page_title %}Cadastrar Produto{% endblock %}
 {% block page_title_jp %}商品登録{% endblock %}
 
 {% block topbar_actions %}
-    <a href="/produtos" class="btn btn-secondary">
-        <i class="ti ti-arrow-left" aria-hidden="true"></i> Voltar
-    </a>
+<a href="/produtos" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#888;letter-spacing:.5px;">
+    <i class="ti ti-arrow-left" style="font-size:14px;" aria-hidden="true"></i>
+    Voltar para produtos
+</a>
 {% endblock %}
 
 {% block conteudo %}
 
-<div class="section-label mb-2">Cadastrar produto 　商品登録</div>
+<span class="section-label">novo produto</span>
 
-<div class="panel">
-    <div class="panel-title">
-        Informações do Produto
-        <span class="panel-title-jp">商品情報</span>
-    </div>
+<form method="POST" action="/cadastrar-produto">
+    <div class="panel">
+        <div class="panel-title">
+            Dados do Produto
+            <span class="panel-title-jp">基本情報</span>
+        </div>
 
-    <form method="POST" action="/cadastrar-produto">
         <div class="form-grid">
-            <div class="form-group" style="grid-column: span 2;">
-                <label for="nome">Nome do Produto</label>
-                <input type="text" id="nome" name="nome"
-                       placeholder="Ex: Uramaki Salmão Philadelphia" required>
+            <div class="form-group">
+                <label for="nome">Nome do produto</label>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Ex: Temaki Salmão"
+                    required
+                    autofocus
+                >
             </div>
+
             <div class="form-group">
                 <label for="preco">Preço (R$)</label>
-                <input type="number" id="preco" name="preco"
-                       step="0.01" min="0" placeholder="0.00" required>
+                <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    placeholder="0,00"
+                    step="0.01"
+                    min="0"
+                    required
+                >
             </div>
+
             <div class="form-group">
-                <label for="estoque">Quantidade em Estoque</label>
-                <input type="number" id="estoque" name="estoque"
-                       min="0" placeholder="0" required>
+                <label for="estoque">Estoque inicial</label>
+                <input
+                    type="number"
+                    id="estoque"
+                    name="estoque"
+                    placeholder="0"
+                    min="0"
+                    required
+                >
             </div>
+        </div>
 
-            <!-- Campo de descrição adicionado aqui -->
-            <div class="form-group" style="grid-column: span 2;">
+        <div class="form-grid">
+            <div class="form-group" style="grid-column: 1 / -1;">
                 <label for="descricao">Descrição</label>
-                <textarea id="descricao" name="descricao"
-                          placeholder="Ingredientes, modo de preparo, alérgenos…"></textarea>
-                <span class="text-xs text-muted mt-1">Campo opcional.</span>
+                <textarea
+                    id="descricao"
+                    name="descricao"
+                    rows="4"
+                    placeholder="Descreva os ingredientes, o preparo ou qualquer detalhe do produto..."
+                    oninput="document.getElementById('char-count').textContent = this.value.length + ' caracteres'"
+                ></textarea>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+                    <span style="font-size:11px;color:#bbb;">Opcional — aparece na listagem de produtos</span>
+                    <span id="char-count" style="font-size:11px;color:#bbb;">0 caracteres</span>
+                </div>
             </div>
         </div>
 
-        <div class="flex gap-1">
-            <button type="submit" class="btn btn-primary">
-                <i class="ti ti-device-floppy" aria-hidden="true"></i> Salvar Produto
+        <div style="display:flex;gap:10px;padding-top:4px;">
+            <button class="btn btn-primary" type="submit">
+                <i class="ti ti-circle-check" aria-hidden="true"></i>
+                Cadastrar Produto
             </button>
-            <a href="/produtos" class="btn btn-secondary">Cancelar</a>
+            <a href="/produtos" class="btn btn-secondary">
+                <i class="ti ti-x" aria-hidden="true"></i>
+                Cancelar
+            </a>
         </div>
-    </form>
+    </div>
+</form>
+
+<div class="panel" style="background:#fffbf9;border-color:#f5ede6;">
+    <div style="display:flex;align-items:flex-start;gap:12px;">
+        <i class="ti ti-info-circle" style="font-size:18px;color:#c0392b;margin-top:1px;flex-shrink:0;" aria-hidden="true"></i>
+        <div>
+            <p style="font-size:12px;font-weight:500;color:#555;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">Dica</p>
+            <p style="font-size:13px;color:#777;line-height:1.7;">
+                Uma boa descrição aumenta a clareza do cardápio. Inclua ingredientes principais, alergênicos e modo de servir.
+            </p>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
