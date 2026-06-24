@@ -7,12 +7,14 @@ def criar_tabelas():
     con = conectar()
     cur = con.cursor()
 
+    # Se quiser adicionar a coluna 'descricao', adicione diretamente aqui:
     cur.execute("""
         CREATE TABLE IF NOT EXISTS produtos (
             id      INTEGER PRIMARY KEY AUTOINCREMENT,
             nome    TEXT NOT NULL,
             preco   REAL NOT NULL,
-            estoque INTEGER NOT NULL DEFAULT 0
+            estoque INTEGER NOT NULL DEFAULT 0,
+            descricao TEXT DEFAULT ''
         )
     """)
 
@@ -30,22 +32,14 @@ def criar_tabelas():
     con.commit()
     con.close()
 
-def adicionar_produto(nome , preco, estoque):
+def adicionar_produto(nome, preco, estoque):
     con = conectar()
     cur = con.cursor()
+    
     cur.execute("""
-                INSERT INTO produtos (nome, preco, estoque)
-                VALUES (?, ?, ?)
-                """, (nome, preco, estoque))
+        INSERT INTO produtos (nome, preco, estoque)
+        VALUES (?, ?, ?)
+    """, (nome, preco, estoque))
+    
     con.commit()
-    con.close()
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS produtos (
-        id      INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome    TEXT    NOT NULL,
-        preco   REAL    NOT NULL,
-        estoque INTEGER NOT NULL,
-        descricao TEXT DEFAULT ''   -- <-- adicionar isso
-    )
-""")
+    con.close()  # A conexão deve ser fechada APENAS quando você terminar tudo!
